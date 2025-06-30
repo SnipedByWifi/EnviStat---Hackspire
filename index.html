@@ -1,1 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carbon Footprint Calculator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
 
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Tomorrow&display=swap');
+
+*{
+    color: #52D1DC;
+}
+
+.footer {
+  background-color: #111;
+  border-top: 1px solid #333;
+}
+
+.footer a {
+  text-decoration: none;
+}
+
+.footer a:hover {
+  text-decoration: underline;
+}
+
+.eco-hero-banner {
+  background-color: #111;
+  height: 900px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border-bottom: 2px solid #333;
+  overflow: hidden;
+}
+
+.eco-hero-text {
+  color: #52D1DC;
+  font-size: 3rem;
+  font-family: 'Tomorrow', sans-serif;
+  font-weight: 400;
+  line-height: 1.4;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 1.5s ease-out forwards;
+}
+
+.eco-hero-text span{
+  color: #00FF00;
+}
+
+.hero-scroll-container {
+  height: 200vh; /* Makes the section tall enough to allow scrolling */
+  position: relative;
+}
+
+.sticky-hero {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.my-5{
+  margin-top: 50%;
+  margin-bottom: 50%;
+  
+}
+#squares{
+    justify-content: center;
+}
+#startup-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: #111;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    pointer-events: none;
+    transition: opacity 1s ease;
+  }
+  
+  #startup-text {
+    font-size: 3rem;
+    font-family: "Tomorrow", sans-serif;
+    color: #52D1DC;
+    display: inline-block;
+    white-space: nowrap;
+  }
+  
+  #startup-text span {
+    display: inline-block;
+    opacity: 1;
+    animation: fadeLeft 0.6s forwards;
+  }
+  
+  @keyframes fadeLeft {
+    to {
+      opacity: 0;
+    }
+  }
+  
+
+html{
+    scroll-behavior: smooth;
+}
+
+body{
+    background-color: #111;
+    font-family: "Tomorrow", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scroll-padding-top: 0;
+}
+
+body {
+    background-color: #111;
+    font-family: "Tomorrow", sans-serif;
+    margin: 0;
+  }
+
+.custom-navbar {
+  background-color: #111;
+  padding: 0.5rem 2rem;
+  border-bottom: 1px solid #333;
+  position: sticky;
+  top: 0;
+  z-index: 999; /* stays on top of other elements */
+}
+
+.navbar-brand {
+    color: white;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-size: 1.2rem;
+}
+
+.navbar-brand img {
+    filter: brightness(0) invert(1);
+}
+
+.nav-link {
+    color: #aaa !important;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    transition: color 0.2s ease;
+}
+
+.nav-link.active,
+.nav-link:hover {
+    color: white !important;
+}
+
+.join-link {
+    font-weight: 600;
+    color: white !important;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.cipher {
+    display: inline-block;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+sup {
+    font-size: 0.6em;
+    color: #aaa;
+}
+#homeimg{
+    margin-top: -80px;
+}
+
+.count {
+    transition: color 0.3s ease;
+    font-weight: bold;
+  }
+
+.accordion-item{
+    background-color: #111 !important;
+}  
+
+.accordion-button{
+    background-color: #111 !important;
+}  
+
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div id="startup-overlay">
+        <h1 id="startup-text">Envistat</h1>
+      </div>
+    <nav class="navbar navbar-expand-lg navbar-dark custom-navbar">
+        <div class="container-fluid">
+
+          <a class="navbar-brand d-flex align-items-center" href="#">
+            <img src="/assets/logopython.png" alt="Logo" height="30" class="me-2">
+            <span id="navbar-brand-text">The Pythons</span>
+          </a>
+
+          <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+            <ul class="navbar-nav gap-4">
+              <li class="nav-item"><a class="nav-link cipher" data-value="HOME" href="#home">HOME</a></li>
+              <li class="nav-item"><a class="nav-link cipher" data-value="CALCULATOR" href="#calculator">CALCULATOR</a></li>
+              <li class="nav-item"><a class="nav-link cipher" data-value="ABOUT" href="#scopeAccordion">ABOUT</a></li>
+              <li class="nav-item"><a class="nav-link cipher" data-value="CONTACT" href="#contact-footer">CONTACT</a></li>
+              <li class="nav-item"><a class="nav-link cipher" data-value="FAQ" href="#squares">FAQ</a></li>
+            </ul>
+          </div>
+  
+          <div class="d-flex align-items-center gap-3">
+            <span class="nav-link">EN</span>
+            <a href="#calculator" class="nav-link join-link">FIND YOUR RANK <span>&#8599;</span></a>
+          </div>
+      
+        </div>
+      </nav>
+      <br><br>
+
+      <div class="container-fluid mt-5 px-5">
+        <div class="row align-items-start">
+          
+          <div class="col-lg-6 col-md-5" id="home">
+            <h1 class="text-white" style="font-size: 5rem;">
+              Your way to a <br>
+              <span style="color: #00FF00;">sustainable</span> future.
+            </h1>
+            <p class="text-info mt-2">
+              Our group, the Pythons want to develop a way to save the environment in a creative way. 
+              This project incorporates STEAM mechanics to rank schools based on their carbon footprint, 
+              thus saving the environment, and providing an incentive to 3R's.
+            </p>
+          </div>
+      
+           
+          <div class="col-lg-6 col-md-7" id="leaderboard">
+            <h4 class="text-white text-end">Eco School Leaderboard</h4>
+            <div class="table-responsive">
+              <table class="table table-dark table-striped table-hover rounded overflow-hidden">
+                <thead>
+                  <tr>
+                    <th>Rank</th>
+                    <th>School</th>
+                    <th>Carbon Footprint (kg CO₂)</th>
+                    <th>Impact Rating</th>
+                    <th>Recycling Rate (%)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><th>1</th><td>NPS Kudlu</td><td class="count" data-target="600" data-suffix=" kg">600</td><td><span class="badge bg-success">Excellent</span></td><td class="count" data-target="100" data-suffix="%">100</td></tr>
+                  <tr><th>2</th><td>NPS Kudlu</td><td class="count" data-target="700" data-suffix=" kg">700</td><td><span class="badge bg-secondary">Good</span></td><td class="count" data-target="90" data-suffix="%">95</td></tr>
+                  <tr><th>3</th><td>NPS Kudlu</td><td class="count" data-target="800" data-suffix=" kg">800</td><td><span class="badge bg-warning">Moderare</span></td><td class="count" data-target="80" data-suffix="%">90</td></tr>
+                  <tr><th>4</th><td>NPS Kudlu</td><td class="count" data-target="900" data-suffix=" kg">900</td><td><span class="badge bg-danger">Too High</span></td><td class="count" data-target="70" data-suffix="%">85</td></tr>
+                  <tr><th>5</th><td>NPS Kudlu</td><td class="count" data-target="1000" data-suffix=" kg">1000</td><td><span class="badge bg-dark">Extremely High</span></td><td class="count" data-target="60" data-suffix="%">80</td></tr>
+                  <tr><th></th><td></td><td style="text-align: center;">...</td><td></td><td></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+      
+        </div>
+      </div>
+      <div class="container my-5 text-white">
+  <h2>Understanding Carbon Emission Scopes</h2>
+  <div class="accordion" id="scopeAccordion">
+
+    <div class="accordion-item text-white">
+      <h2 class="accordion-header" id="scope1Heading">
+        <button class="accordion-button text-white" type="button" data-bs-toggle="collapse" data-bs-target="#scope1" aria-expanded="true">
+          Scope 1: Direct Emissions (What the School Burns)
+        </button>
+      </h2>
+      <div id="scope1" class="accordion-collapse collapse show" data-bs-parent="#scopeAccordion">
+        <div class="accordion-body">
+          Emissions from school-controlled sources like fuel used in school buses, gas stoves, backup generators, or refrigerant leaks.3
+          ●	Examples for a School:
+          <br>
+          ○	Burning natural gas, heating oil, or propane for heating school buildings, water, or cooking in the cafeteria.
+          <br>
+          ○ <i>	Fuel consumed by school-owned vehicles (e.g., school buses, maintenance vans, groundskeeping equipment). </i>
+          <br>
+          ○	<i> Emissions from on-site generators (e.g., diesel generators for backup power). </i>
+          <br>
+          ○	<i> Leaks from refrigerants in air conditioning systems, refrigerators, or freezers (fugitive emissions). </i>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item text-white">
+      <h2 class="accordion-header" id="scope2Heading">
+        <button class="accordion-button collapsed text-white" type="button" data-bs-toggle="collapse" data-bs-target="#scope2">
+          Scope 2: Indirect Emissions from Purchased Energy
+        </button>
+      </h2>
+      <div id="scope2" class="accordion-collapse collapse" data-bs-parent="#scopeAccordion">
+        <div class="accordion-body">
+          These are emissions from the electricity the school uses, generated elsewhere but consumed on-site.
+          <br>
+          ●	Examples for a School:
+          <br>
+          <i> ○	Electricity purchased from the grid to power lights, computers, smartboards, laboratories, and all electrical appliances throughout the school. </i>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item text-white">
+      <h2 class="accordion-header" id="scope3Heading">
+        <button class="accordion-button collapsed text-white" type="button" data-bs-toggle="collapse" data-bs-target="#scope3">
+          Scope 3: Other Indirect Emissions
+        </button>
+      </h2>
+      <div id="scope3" class="accordion-collapse collapse" data-bs-parent="#scopeAccordion">
+        <div class="accordion-body">
+          Everything else – like food supply chain, student commuting, waste disposal, and water consumption.
+          <br>
+          ●	Examples for a School:
+          <br>
+          <i>>○	Upstream Activities (from suppliers/employee activities): </i>
+          <br>
+          <i>>■	Purchased Goods & Services: Emissions from the production, transportation, and disposal of all materials and supplies the school buys (e.g., paper, plastic, textbooks, school uniforms, lab chemicals, furniture, cleaning supplies, food for cafeteria, construction materials for new buildings/renovations). </i>
+          <br>
+          <i>>■	Employee & Student Commuting: Emissions from staff and students travelling to and from school using personal cars, public transport, or other non-school-owned transport. </i>
+          <br>
+          >■	Business Travel: Emissions from teachers/staff travelling for conferences, training, field trips (if using commercial transport not owned by the school).
+          <br>
+          <i>>■	Waste Generated: Emissions from the treatment and disposal of waste generated by the school (e.g., landfill emissions from solid waste, wastewater treatment). </i>
+          <br>
+          <i>>○	Downstream Activities (less common for schools, but could include): </i>
+          <br>
+          <i>>■	End-of-life treatment of products or materials that the school might distribute (e.g., old school-branded items, disposed electronics if not handled by the school directly as Scope 1). </i>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+ <div class="container text-white my-5">
+  <h2 class="mb-4">Why This Calculator Matters</h2>
+  <div class="row g-4">
+
+    <div class="col-md-6 col-lg-4">
+      <div class="p-4" style="background-color:#111; border:1px solid #333; border-radius:10px;">
+        <h5 class="text-info">💡 School-Specific</h5>
+        <p>Tailored for school operations — not generic like other calculators.</p>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-lg-4">
+      <div class="p-4" style="background-color:#111; border:1px solid #333; border-radius:10px;">
+        <h5 class="text-info">🏆 Gamified Leaderboard</h5>
+        <p>Ranks schools by green practices, adds motivation through competition.</p>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-lg-4">
+      <div class="p-4" style="background-color:#111; border:1px solid #333; border-radius:10px;">
+        <h5 class="text-info">📊 Projections</h5>
+        <p>Shows carbon trends over 1–5 years based on input data.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="hero-scroll-container">
+  <div class="eco-hero-banner sticky-hero">
+    <div class="eco-hero-text">
+      <h1>Towards a <span> Greener </span> Tomorrow.<br>One School at a Time.</h1>
+    </div>
+  </div>
+</section>
+
+<div class="container text-white my-5">
+  <h2>Comprehensive Carbon Footprint Formula</h2>
+  <div class="p-4 mt-3" style="background-color:#111; border:1px solid #333; border-radius:10px;">
+    <code style="white-space: pre-wrap; color: #0ff;">
+      Total CO₂e = Scope 1 + Scope 2 + Scope 3
+    </code>
+    <p class="mt-3">Each scope covers different emission sources — fuel, energy, goods, and transport. The formula aggregates all to show your total impact.</p>
+  </div>
+</div>
+
+<div class="container text-white my-5">
+  <h2>Emission Factor Inputs</h2>
+  <div class="row g-4">
+
+    <div class="col-md-6">
+      <div class="p-3" style="background-color:#111; border:1px solid #333; border-radius:10px;">
+        <h6 class="text-info">Scope 1</h6>
+        <ul class="small">
+          <li>Litres of Diesel</li>
+          <li>Gas Usage</li>
+          <li>Refrigerant Leakage</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="p-3" style="background-color:#111; border:1px solid #333; border-radius:10px;">
+        <h6 class="text-info">Scope 2</h6>
+        <ul class="small">
+          <li>Electricity Usage (kWh)</li>
+          <li>Steam (if any)</li>
+          <li>Heat (if any)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="col-md-12">
+      <div class="p-3" style="background-color:#111; border:1px solid #333; border-radius:10px;">
+        <h6 class="text-info">Scope 3</h6>
+        <ul class="small">
+          <li>Paper & Plastic (kg)</li>
+          <li>Food & Waste</li>
+          <li>Commute Distance</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</div>
+      <div class="container my-5 text-white" id="calculator">
+        <div class="row">
+          <div class="col-lg-6">
+            <h2 class="mb-4">Eco Score Calculator</h2>
+            <form id="eco-form">
+              <div class="row g-3">
+                <div class="col-md-12">
+                  <label for="paper" class="form-label">Paper + Plastic Used (kg) - Per month</label>
+                  <input type="number" class="form-control" id="paper" required>
+                </div>
+                <div class="col-md-12">
+                  <label for="recycled" class="form-label">Paper + Plastic Recycled (kg) - Per month</label>
+                  <input type="number" class="form-control" id="recycled" required>
+                </div>
+                <div class="col-md-12">
+                  <label for="greenery" class="form-label">Greenery Area (sqm)</label>
+                  <input type="number" class="form-control" id="greenery" required>
+                </div>
+                <div class="col-md-12">
+                  <label for="electricity" class="form-label">Electricity Used (kWh) - Per month</label>
+                  <input type="number" class="form-control" id="electricity" required>
+                </div>
+                <div class="col-md-12">
+                  <label for="students" class="form-label">Number of Students - Per month</label>
+                  <input type="number" class="form-control" id="students" required>
+                </div>
+                <div class="col-md-12">
+                  <label for="school" class="form-label">School Name</label>
+                  <input type="text" class="form-control" id="school" required>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-success mt-4">Calculate</button>
+            </form>
+      
+            <div id="result" class="mt-4 fs-4"></div>
+          </div>
+          
+          <div class="col-lg-6">
+            <p class="mt-4">
+                <lottie-player 
+                  id="eco-animation"
+                  src="assets/tree_anim.json"
+                  background="transparent"
+                  loop="false"
+                  >
+                </lottie-player>
+            </p>
+          </div>
+        </div>
+      </div>
+
+  <div class="row g-4" id="squares">
+    <div class="col-md-4">
+      <div class="p-4" style="background-color: #111; border: 1px solid #333;">
+        <h5>Why This Instead of Just AI?</h5>
+        <p>Tracks progress, not just answers. Makes schools reflect, act, and improve over time.</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="p-4" style="background-color: #111; border: 1px solid #333;">
+        <h5>Why Would Schools Care?</h5>
+        <p>It saves money, builds reputation, strengthens grant applications, and shows responsibility.</p>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="p-4" style="background-color: #111; border: 1px solid #333;">
+        <h5>India's Global CO₂ Role</h5>
+        <p>India ranks 3rd globally in fossil CO₂ emissions with about 8% of the world share — highlighting the urgency for action at school levels.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="footer mt-5 py-5" id="contact-footer">
+  <div class="container">
+    <div class="row text-white">
+      <div class="col-md-6 mb-4">
+        <h5 class="mb-3" style="letter-spacing: 1px;">Contact & Details</h5>
+        <p class="text-muted"><strong>Team:</strong> The Pythons</p>
+        <p class="text-muted">
+          <strong>Email:</strong>
+          <a href="mailto:hackspire.npskudlu@outlook.com" class="text-info">hackspire.npskudlu@outlook.com</a>
+        </p>
+        <p class="text-muted"><strong>Institution:</strong> National Public School, Kudlu</p>
+        <p class="text-muted"><strong>Location:</strong> Bengaluru, India</p>
+        <p class="text-muted"><strong>Project:</strong> Envistat — Carbon Footprint Tracker for Schools</p>
+      </div>
+
+      <div class="col-md-6 mb-4">
+        <h5 class="mb-3" style="letter-spacing: 1px;">About the Project</h5>
+        <p class="small text-muted">
+          Envistat is a STEAM-integrated platform built during Hackspire 2025 to measure, rank, and reduce school-level carbon emissions. With a focus on education, sustainability, and gamified engagement, Envistat empowers institutions to take meaningful climate action — one footprint at a time.
+        </p>
+
+        <ul class="list-unstyled small mt-3">
+          <li><a href="#" class="text-info">Leaderboard</a></li>
+          <li><a href="#" class="text-info">Eco Score Calculator</a></li>
+          <li><a href="#" class="text-info">Learn About Scopes</a></li>
+          <li><a href="#" class="text-info">Join the Movement</a></li>
+        </ul>
+      </div>
+
+    </div>
+    <hr style="border-color: #333;">
+    <div class="text-center text-muted small">
+      &copy; 2025 The Pythons | Built with 💻 & 🌱 at Hackspire | All rights reserved.
+    </div>
+  </div>
+</footer>
+
+
+      <script>
+        const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      
+        document.querySelectorAll(".cipher").forEach((el) => {
+          const originalText = el.getAttribute("data-value");
+      
+          let interval = null;
+          let hasPlayed = false;
+      
+          el.addEventListener("mouseenter", () => {
+            if (interval !== null || hasPlayed) return;
+      
+            hasPlayed = true;
+            let position = 0;
+      
+            interval = setInterval(() => {
+              let displayed = "";
+      
+              for (let i = 0; i < originalText.length; i++) {
+                if (i < position + 3) {
+                  const randomChar = letters[Math.floor(Math.random() * letters.length)];
+                  displayed += `<span style="color: white">${randomChar}</span>`;
+                } else {
+                  displayed += `<span style="color: grey">${originalText[i]}</span>`;
+                }
+
+              }
+      
+              el.innerHTML = displayed;
+              position++;
+      
+              if (position > originalText.length) {
+                clearInterval(interval);
+                interval = null;
+                el.textContent = originalText;
+              }
+            }, 50);
+          });
+      
+          el.addEventListener("mouseleave", () => {
+            hasPlayed = false;
+            if (interval !== null) {
+              clearInterval(interval);
+              interval = null;
+              el.textContent = originalText;
+            }
+          });
+        });
+
+        document.addEventListener("DOMContentLoaded", function () {
+    const counters = document.querySelectorAll('.count');
+
+    counters.forEach(counter => {
+      const target = parseFloat(counter.getAttribute('data-target')) || 0;
+      const suffix = counter.getAttribute('data-suffix') || '';
+      let current = 0;
+
+      const randomFactor = 0.8 + Math.random() * 0.4;
+
+      let baseDuration = suffix === "%" ? target * 96 : target * 1.5;
+      const maxDuration = suffix === "%" ? 4000 : 1500;
+      const duration = Math.min(baseDuration * randomFactor, maxDuration);
+
+      const frameRate = 30;
+      const totalFrames = Math.ceil(duration / frameRate);
+      const increment = target / totalFrames;
+
+      function update() {
+        current += increment;
+
+        if (current < target) {
+          counter.innerText = Math.floor(current) + suffix;
+          setTimeout(update, frameRate);
+        } else {
+          counter.innerText = target + suffix;
+        }
+      }
+
+      update();
+    });
+  });
+  
+  window.addEventListener("load", () => {
+    const text = "Envistat";
+    const container = document.getElementById("startup-text");
+
+    container.innerHTML = "";
+
+    [...text].forEach((char, i) => {
+      const span = document.createElement("span");
+      span.textContent = char;
+      span.style.animationDelay = `${i * 0.1}s`;
+      container.appendChild(span);
+    });
+
+    setTimeout(() => {
+      document.getElementById("startup-overlay").style.opacity = "0";
+    }, 1500);
+
+    setTimeout(() => {
+      document.getElementById("startup-overlay").style.display = "none";
+    }, 2500);
+  });
+
+    document.getElementById("eco-form").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const P = parseFloat(document.getElementById("paper").value);
+    const R = parseFloat(document.getElementById("recycled").value);
+    const G = parseFloat(document.getElementById("greenery").value);
+    const E = parseFloat(document.getElementById("electricity").value);
+    const S = parseFloat(document.getElementById("students").value);
+    const Sc = parseFloat(document.getElementById("school").value);
+
+    const paperrecycle = P - R;
+    const greeneryOffset = G * 0.2;
+    const co2Emissions = Math.max(0, paperrecycle + (E * 0.7) - greeneryOffset);
+    const recyclingRate = (R / (P + 1)) * 100;
+
+    const recyclingEff = R / (P + 1);
+    const greeneryPerStudent = G / (S + 1);
+    const electricityPerStudent = E / (S * 20 + 1);
+
+    const ecoScore = 100 * (
+      recyclingEff * 0.4 +
+      greeneryPerStudent * 0.3 +
+      (1 - electricityPerStudent) * 0.3
+    );
+    
+    const finalScore = Math.max(0, Math.min(100, ecoScore.toFixed(2)));
+    document.getElementById("result").innerHTML = "Your carbon emissions: " + finalScore + "kg . Your recycling rate: " + (recyclingEff * 100) + "%";
+  });
+
+
+  document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("eco-form").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const formData = {
+      trash: parseFloat(document.getElementById("paper").value),
+      trash_recycled: parseFloat(document.getElementById("recycled").value),
+      electricity: parseFloat(document.getElementById("electricity").value),
+      student_count: parseFloat(document.getElementById("students").value),
+      greenery_area: parseFloat(document.getElementById("greenery").value),
+      school: document.getElementById("school").value.trim()
+    };
+
+    fetch("http://localhost:3000/submit", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(formData)
+    })
+      .then(res => res.json())
+      .then(data => {
+        console.log("Saved to DB:", data);
+      })
+      .catch(err => {
+        console.error("DB Error:", err);
+      });
+  });
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+  const animation = document.getElementById("eco-animation");
+
+  animation.addEventListener("load", () => {
+    animation.pause();
+
+    const observer = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          animation.play();
+          observer.unobserve(animation);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    observer.observe(animation);
+  });
+});
+
+
+      </script>
+</body>
+</html> 
