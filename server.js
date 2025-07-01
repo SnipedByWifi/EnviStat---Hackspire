@@ -30,23 +30,23 @@ db.connect(err => {
 app.post("/submit", (req, res) => {
   const {trash, trash_recycled, electricity, student_count, greenery_area, school} = req.body;
 
-  const query = `INSERT INTO calculator (trash, trash_recycled, electricity, student_count, greenery_area, school) VALUES (?, ?, ?, ?, ?)`;
+  const query = `INSERT INTO calculator (trash, trash_recycled, electricity, student_count, greenery_area, school) VALUES (?, ?, ?, ?, ?, ?)`;
   db.query(query, [trash, trash_recycled, electricity, student_count, greenery_area, school], (err, result) => {
     console.log("Received data:", req.body);
-      if (err) {
-        console.error("MySQL insert error:", err);
-        res.status(500).json({ error: "DB insert failed" });
-        return;
-      }
-      res.status(200).json({ message: "Data saved!", id: result.insertId });
-    });
+    if (err) {
+      console.error("MySQL insert error:", err);
+      res.status(500).json({ error: "DB insert failed" });
+      return;
+    }
+    res.status(200).json({ message: "Data saved!", id: result.insertId });
   });
+});
 
 app.get("/get-data", (req, res) => {
   const query = "SELECT * FROM calculator ORDER BY entry_no ASC";
   db.query(query, (err, results) => {
     if (err) {
-      console.error("MySQL fetch error:", err); // add this for more detailed error
+      console.error("MySQL fetch error:", err); // added this for more detailed error
       return res.status(500).json({ error: "DB fetch failed", details: err });
     }
     res.status(200).json(results);
@@ -94,6 +94,4 @@ app.listen(3000, () => {
   console.log("Connected to Bootstrap!");
   console.log("Connected to XAMPP!");
 });
-
-
 
